@@ -1,27 +1,30 @@
 class Expander
   attr_reader :results
   WILDCARD = ('a'..'c').to_a #eventually will be a..z + 0..9
-  def initialize(pattern)
-    @pattern = pattern.split ''
+  def initialize(patterns)
+    @patterns = patterns
   end
 
   def results
-    if @pattern.size == 1
-      WILDCARD
+    return WILDCARD if @patterns.size == 1
+    return self.class.combine(WILDCARD, WILDCARD)
+  end
+
+  def self.expand(xs, ys, *tail)
+    result = combine(xs,ys)
+    if tail == []
+      result
     else
-      ['aa','ab','ac','ba','bb','bc','ca','cb','cc'] 
+      combine(result, *tail)
     end
   end
 
-  def self.permute(xs, ys)
+  def self.combine(xs, ys)
     xs.inject([]) do |m, x|
       ys.each do |y|
-        m << [x,y] 
+        m << [x,y].flatten
       end
       m
     end
-  end
-
-  def expand(head, *tail)
   end
 end
