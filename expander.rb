@@ -1,11 +1,5 @@
 module Expander
   attr_reader :results
-  WILDCARD = ('a'..'c').to_a #eventually will be a..z + 0..9
-
-  def self.results(patterns)
-    return WILDCARD if patterns.size == 1
-    return combine(WILDCARD, WILDCARD)
-  end
 
   def self.expand(xs, ys, *tail)
     result = combine(xs,ys)

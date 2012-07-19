@@ -2,20 +2,6 @@ require 'rspec'
 require 'expander'
 describe Expander do
   let(:wildcard) { ['a','b','c'] }
-  it 'should take a pattern and return a results' do
-    subject.results(['foo']).should_not be_nil
-  end
-
-  it 'should return alphanumeric matches for a wildcard' do
-    subject.results(['*']).should == wildcard
-  end
-
-  it 'should return results for 2 wildcards' do
-    subject.results(['*','*']).should == [
-      ["a", "a"], ["a", "b"], ["a", "c"], 
-      ["b", "a"], ["b", "b"], ["b", "c"], 
-      ["c", "a"], ["c", "b"], ["c", "c"]] 
-  end
 
   describe '.parse' do
     it 'breaks a string into an array of patterns' do
