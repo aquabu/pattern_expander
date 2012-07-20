@@ -4,8 +4,19 @@ describe Expander do
   let(:wildcard) { ['a','b','c'] }
 
   describe '.parse' do
-    it 'breaks a string into an array of patterns' do
-      pending
+    it 'converts patterns into arrays' do
+      subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
+    end
+    # sets
+  end
+
+  describe '.parse_groups' do
+    it 'should return an array of group string' do
+      subject.parse_groups('[a][b][c]').should == ['a','b','c']
+    end
+
+    it 'should return on array of group strings including | chars' do
+      subject.parse_groups('[a|b][c|d]').should == ['a|b','c|d']
     end
   end
 
