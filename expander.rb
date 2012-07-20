@@ -1,5 +1,8 @@
 module Expander
   attr_reader :results
+  def self.parse_and_expand(pattern)
+    expand(*parse(pattern))
+  end
   def self.parse(pattern)
     parse_groups(pattern).map do |group|
       group.split("|")

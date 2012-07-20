@@ -2,6 +2,13 @@ require 'rspec'
 require 'expander'
 describe Expander do
   let(:wildcard) { ['a','b','c'] }
+  describe '.parse_and_expand' do
+    it 'should create combinations of parsed strng values' do
+      subject.parse_and_expand('[a|b|][1|2]').should == [
+        ['a','1'],['a','2'],
+        ['b','1'],['b','2']]
+    end
+  end
 
   describe '.parse' do
     it 'converts patterns into arrays' do
@@ -11,6 +18,10 @@ describe Expander do
   end
 
   describe '.parse_groups' do
+    it 'should handle a single group' do
+      subject.parse_groups('[a]').should == ['a']
+    end
+
     it 'should return an array of group string' do
       subject.parse_groups('[a][b][c]').should == ['a','b','c']
     end
