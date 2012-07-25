@@ -1,19 +1,31 @@
 module Expander
-  attr_reader :results
-  def self.parse_and_expand(pattern)
+  def parse_and_expand(pattern)
     expand(*parse(pattern))
   end
-  def self.parse(pattern)
+
+  def parse(pattern)
     parse_groups(pattern).map do |group|
       group.split("|")
     end
   end
 
-  def self.parse_groups(pattern)
+  def replace(groups)
+    groups.map do |group|
+      group.inject([]) do |memo, item|
+        if item == "\\w"
+          memo += ['a'..'z', 0..9].inject([]) {|m,v| m + v.to_a }
+        else
+          memo << item
+        end
+      end
+    end
+  end
+
+  def parse_groups(pattern)
     pattern.scan(/\[(.*?)\]/).flatten
   end
 
-  def self.expand(xs, ys, *tail)
+  def expand(xs, ys, *tail)
     result = combine(xs,ys)
     if tail == []
       result
@@ -22,7 +34,7 @@ module Expander
     end
   end
 
-  def self.combine(xs, ys)
+  def combine(xs, ys)
     xs.inject([]) do |m, x|
       ys.each do |y|
         m << [x,y].flatten

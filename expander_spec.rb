@@ -1,7 +1,9 @@
 require 'rspec'
 require 'expander'
 describe Expander do
-  let(:wildcard) { ['a','b','c'] }
+  subject {Class.new {include Expander}.new }
+
+  let(:wildcard) { ['a'..'z', 0..9].inject([]) {|m,v| m + v.to_a} }
   describe '.parse_and_expand' do
     it 'should create combinations of parsed strng values' do
       subject.parse_and_expand('[a|b|][1|2]').should == [
@@ -14,9 +16,14 @@ describe Expander do
     it 'converts patterns into arrays' do
       subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
     end
-    # sets
   end
 
+  describe '.replace' do
+    it 'replaces a set with an array' do
+      subject.replace([['\\w']]).should == [ wildcard ] 
+    end
+  end
+  
   describe '.parse_groups' do
     it 'should handle a single group' do
       subject.parse_groups('[a]').should == ['a']
