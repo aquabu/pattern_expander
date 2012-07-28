@@ -10,17 +10,45 @@ describe Expander do
         ['a','1'],['a','2'],
         ['b','1'],['b','2']]
     end
+    it 'should substitute and permute character classes' do
+      subject.parse_and_expand('[a][\d]').should == [
+        ['a', '0'],
+        ['a', '1'],
+        ['a', '2'],
+        ['a', '3'],
+        ['a', '4'],
+        ['a', '5'],
+        ['a', '6'],
+        ['a', '7'],
+        ['a', '8'],
+        ['a', '9']
+      ]
+    end
   end
 
   describe '.parse' do
     it 'converts patterns into arrays' do
       subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
     end
+
+    it 'should substitute character classes' do
+      subject.parse('[a][\d]').should == [
+        ['a'],['0','1','2','3','4','5','6','7','8','9'] 
+      ]
+    end
   end
 
-  describe '.replace' do
-    it 'replaces a set with an array' do
-      subject.replace([['\\w']]).should == [ wildcard ] 
+  describe '.substitute' do
+    it 'substitutes a \\w  with an array of wildcard chars' do
+      subject.substitute([['\\w']]).should == [ wildcard ] 
+    end
+
+    it 'substitutes a \\d with an array of numbers' do
+      subject.substitute([['\\d']]).should == [ (0..9).map {|c| c.to_s} ] 
+    end
+
+    it 'substitutes \\l with an array of letters' do
+      subject.substitute([['\\l']]).should == [ ('a'..'z').to_a ] 
     end
   end
   

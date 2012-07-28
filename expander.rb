@@ -4,16 +4,21 @@ module Expander
   end
 
   def parse(pattern)
-    parse_groups(pattern).map do |group|
+    groups = parse_groups(pattern).map do |group|
       group.split("|")
     end
+    substitute(groups)
   end
 
-  def replace(groups)
+  def substitute(groups)
     groups.map do |group|
       group.inject([]) do |memo, item|
         if item == "\\w"
           memo += ['a'..'z', 0..9].inject([]) {|m,v| m + v.to_a }
+        elsif item == "\\d"
+          (0..9).map {|c| c.to_s }
+        elsif item == "\\l"
+          ('a'..'z').to_a 
         else
           memo << item
         end
