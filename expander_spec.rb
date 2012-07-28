@@ -3,7 +3,7 @@ require 'expander'
 describe Expander do
   subject {Class.new {include Expander}.new }
 
-  let(:wildcard) { ['a'..'z', 0..9].inject([]) {|m,v| m + v.to_a} }
+  let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
   describe '.parse_and_expand' do
     it 'should create combinations of parsed strng values' do
       subject.parse_and_expand('[a|b|][1|2]').should == [

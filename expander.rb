@@ -14,9 +14,9 @@ module Expander
     groups.map do |group|
       group.inject([]) do |memo, item|
         if item == "\\w"
-          memo += ['a'..'z', 0..9].inject([]) {|m,v| m + v.to_a }
+          memo += ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a }
         elsif item == "\\d"
-          (0..9).map {|c| c.to_s }
+          ('0'..'9').to_a
         elsif item == "\\l"
           ('a'..'z').to_a 
         else
