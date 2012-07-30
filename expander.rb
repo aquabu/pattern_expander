@@ -1,4 +1,9 @@
 module Expander
+  CHARACTER_CLASSES = {
+    "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
+    "\\d" => ('0'..'9').to_a,
+    "\\l" => ('a'..'z').to_a 
+  } 
   def parse_and_expand(pattern)
     expand(*parse(pattern))
   end
@@ -13,12 +18,8 @@ module Expander
   def substitute(groups)
     groups.map do |group|
       group.inject([]) do |memo, item|
-        if item == "\\w"
-          memo += ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a }
-        elsif item == "\\d"
-          ('0'..'9').to_a
-        elsif item == "\\l"
-          ('a'..'z').to_a 
+        if CHARACTER_CLASSES[item]
+          memo += CHARACTER_CLASSES[item]
         else
           memo << item
         end
