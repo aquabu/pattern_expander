@@ -5,12 +5,12 @@ module Expander
     "\\l" => ('a'..'z').to_a 
   } 
 
-  def expand(pattern)
-    combine_all(*substitute_character_classes(parse(pattern)))
-  end
-
   def expand_strings(pattern)
     expand(pattern).map(&:join)
+  end
+
+  def expand(pattern)
+    combine_all(*substitute_character_classes(parse(pattern)))
   end
 
   def parse(pattern)
@@ -19,16 +19,16 @@ module Expander
     end
   end
 
+  def parse_groups(pattern)
+    pattern.scan(/\[(.*?)\]/).flatten
+  end
+
   def substitute_character_classes(groups)
     groups.map do |group|
       group.inject([]) do |memo, item|
         memo += CHARACTER_CLASSES[item] || [item]
       end
     end
-  end
-
-  def parse_groups(pattern)
-    pattern.scan(/\[(.*?)\]/).flatten
   end
 
   def combine_all(xs, ys, *tail)
