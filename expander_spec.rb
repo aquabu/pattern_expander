@@ -31,12 +31,6 @@ describe Expander do
     it 'converts patterns into arrays' do
       subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
     end
-
-    it 'should substitute_character_classes character classes' do
-      subject.parse('[a][\d]').should == [
-        ['a'],['0','1','2','3','4','5','6','7','8','9'] 
-      ]
-    end
   end
 
   describe '.substitute_character_classes' do

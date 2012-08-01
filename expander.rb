@@ -6,14 +6,13 @@ module Expander
   } 
 
   def parse_and_combine_all(pattern)
-    combine_all(*parse(pattern))
+    combine_all(*substitute_character_classes(parse(pattern)))
   end
 
   def parse(pattern)
-    groups = parse_groups(pattern).map do |group|
+    parse_groups(pattern).map do |group|
       group.split("|")
     end
-    substitute_character_classes(groups)
   end
 
   def substitute_character_classes(groups)
