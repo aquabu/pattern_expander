@@ -4,14 +4,15 @@ describe Expander do
   subject {Class.new {include Expander}.new }
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
-  describe '.parse_and_expand' do
+  describe '.parse_and_combine_all' do
     it 'should create combinations of parsed strng values' do
-      subject.parse_and_expand('[a|b|][1|2]').should == [
+      subject.parse_and_combine_all('[a|b|][1|2]').should == [
         ['a','1'],['a','2'],
         ['b','1'],['b','2']]
     end
-    it 'should substitute and permute character classes' do
-      subject.parse_and_expand('[a][\d]').should == [
+
+    it 'should substitute_character_classes and permute character classes' do
+      subject.parse_and_combine_all('[a][\d]').should == [
         ['a', '0'],
         ['a', '1'],
         ['a', '2'],
@@ -31,24 +32,24 @@ describe Expander do
       subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
     end
 
-    it 'should substitute character classes' do
+    it 'should substitute_character_classes character classes' do
       subject.parse('[a][\d]').should == [
         ['a'],['0','1','2','3','4','5','6','7','8','9'] 
       ]
     end
   end
 
-  describe '.substitute' do
+  describe '.substitute_character_classes' do
     it 'substitutes a \\w  with an array of wildcard chars' do
-      subject.substitute([['\\w']]).should == [ wildcard ] 
+      subject.substitute_character_classes([['\\w']]).should == [ wildcard ] 
     end
 
     it 'substitutes a \\d with an array of numbers' do
-      subject.substitute([['\\d']]).should == [ (0..9).map {|c| c.to_s} ] 
+      subject.substitute_character_classes([['\\d']]).should == [ (0..9).map {|c| c.to_s} ] 
     end
 
     it 'substitutes \\l with an array of letters' do
-      subject.substitute([['\\l']]).should == [ ('a'..'z').to_a ] 
+      subject.substitute_character_classes([['\\l']]).should == [ ('a'..'z').to_a ] 
     end
   end
   
@@ -78,8 +79,8 @@ describe Expander do
     end
   end
 
-  it '.expand combines lists of arrays' do
-    subject.expand([:a,:b],[1,2],[:c,:d]).should == [[:a, 1, :c],
+  it '.combine_all combines lists of arrays' do
+    subject.combine_all([:a,:b],[1,2],[:c,:d]).should == [[:a, 1, :c],
       [:a, 1, :d],
       [:a, 2, :c],
       [:a, 2, :d],
@@ -93,7 +94,7 @@ describe Expander do
     let(:list) { ['a'..'c', 'A'..'C' ,1..3, 11..13] }
     it 'combines lots of arrays' do
       expect { 
-        subject.expand(*list)
+        subject.combine_all(*list)
       }.to_not raise_error
     end
     it 'has the expected number of permutations' do
@@ -101,7 +102,7 @@ describe Expander do
       list.each do |item|
         expected_count *= item.to_a.size
       end
-      subject.expand(*list).size.should == expected_count
+      subject.combine_all(*list).size.should == expected_count
     end
   end
 end

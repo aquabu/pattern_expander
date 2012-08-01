@@ -4,18 +4,19 @@ module Expander
     "\\d" => ('0'..'9').to_a,
     "\\l" => ('a'..'z').to_a 
   } 
-  def parse_and_expand(pattern)
-    expand(*parse(pattern))
+
+  def parse_and_combine_all(pattern)
+    combine_all(*parse(pattern))
   end
 
   def parse(pattern)
     groups = parse_groups(pattern).map do |group|
       group.split("|")
     end
-    substitute(groups)
+    substitute_character_classes(groups)
   end
 
-  def substitute(groups)
+  def substitute_character_classes(groups)
     groups.map do |group|
       group.inject([]) do |memo, item|
         if CHARACTER_CLASSES[item]
@@ -31,12 +32,12 @@ module Expander
     pattern.scan(/\[(.*?)\]/).flatten
   end
 
-  def expand(xs, ys, *tail)
+  def combine_all(xs, ys, *tail)
     result = combine(xs,ys)
     if tail == []
       result
     else
-      expand(result, *tail)
+      combine_all(result, *tail)
     end
   end
 
