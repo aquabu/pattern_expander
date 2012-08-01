@@ -4,15 +4,15 @@ describe Expander do
   subject {Class.new {include Expander}.new }
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
-  describe '.parse_and_combine_all' do
+  describe '.expand' do
     it 'should create combinations of parsed strng values' do
-      subject.parse_and_combine_all('[a|b|][1|2]').should == [
+      subject.expand('[a|b|][1|2]').should == [
         ['a','1'],['a','2'],
         ['b','1'],['b','2']]
     end
 
     it 'should substitute_character_classes and permute character classes' do
-      subject.parse_and_combine_all('[a][\d]').should == [
+      subject.expand('[a][\d]').should == [
         ['a', '0'],
         ['a', '1'],
         ['a', '2'],
@@ -24,6 +24,12 @@ describe Expander do
         ['a', '8'],
         ['a', '9']
       ]
+    end
+  end
+
+  describe '.expand_strings' do
+    it 'returns expanded patterns as strings' do
+      subject.expand_strings('[a|b|][1|2]').should == ['a1','a2','b1','b2']
     end
   end
 
