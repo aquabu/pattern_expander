@@ -1,9 +1,33 @@
 require 'rspec'
 require 'expander'
+describe Expander::Index do
+  describe '#map_index_to_array' do
+    it 'should take an index and an array of index sizes and return an array of indexes' do
+      subject.map_index_to_array(0,[2,2,2]).should == [0,0,0]
+      subject.map_index_to_array(1,[2,2,2]).should == [0,0,1]
+      subject.map_index_to_array(2,[2,2,2]).should == [0,1,0]
+      subject.map_index_to_array(3,[2,2,2]).should == [0,1,1]
+      subject.map_index_to_array(4,[2,2,2]).should == [1,0,0]
+    end
+
+    it 'can handle a collection of index sizes of variable length'
+  end
+end
+
 describe Expander do
   subject {Class.new {include Expander}.new }
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
+  describe '.index' do
+    it 'takes an integer and references the required array values' do
+      pending
+      subject.index(0).should == 'a1'
+      subject.index(1).should == 'a2'
+      subject.index(2).should == 'b1'
+      subject.index(2).should == 'b2'
+    end
+  end
+
   describe '.expand' do
     it 'should create combinations of parsed strng values' do
       subject.expand('[a|b|][1|2]').should == [
