@@ -1,8 +1,8 @@
 require 'rspec'
 require 'expander'
 
-describe Expander do
-  subject {Class.new {include Expander}.new }
+describe Combiner do
+  subject {Class.new {include Combiner}.new }
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
 
@@ -51,7 +51,7 @@ describe Expander do
       subject.get_patterns_by_range('[a|b|][1|2]',0..3).should == ['a1','a2','b1','b2']
     end
 
-    it 'should allow expanded values' do
+    it 'should allow combinations' do
       subject.get_patterns_by_range('[\\d][\\d]',21..23).should == 
         ['21','22','23']
     end
@@ -63,15 +63,15 @@ describe Expander do
     end
   end
 
-  describe '.expand' do
+  describe '.substitute_and_combine_all' do
     it 'should create combinations of parsed string values' do
-      subject.expand('[a|b|][1|2]').should == [
+      subject.substitute_and_combine_all('[a|b|][1|2]').should == [
         ['a','1'],['a','2'],
         ['b','1'],['b','2']]
     end
 
     it 'should substitute_character_classes and permute character classes' do
-      subject.expand('[a][\d]').should == [
+      subject.substitute_and_combine_all('[a][\d]').should == [
         ['a', '0'],
         ['a', '1'],
         ['a', '2'],
@@ -86,9 +86,9 @@ describe Expander do
     end
   end
 
-  describe '.expand_strings' do
-    it 'returns expanded patterns as strings' do
-      subject.expand_strings('[a|b|][1|2]').should == ['a1','a2','b1','b2']
+  describe '.substitute_and_combine_all_to_s' do
+    it 'returns combinations as strings' do
+      subject.substitute_and_combine_all_to_s('[a|b|][1|2]').should == ['a1','a2','b1','b2']
     end
   end
 

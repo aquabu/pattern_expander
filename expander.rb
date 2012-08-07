@@ -1,4 +1,4 @@
-module Expander
+module Combiner
   CHARACTER_CLASSES = {
     "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
     "\\d" => ('0'..'9').to_a,
@@ -10,10 +10,10 @@ module Expander
   end
 
   def get_pattern_by_index(pattern, i)
-    expandeds = substitute_character_classes(parse(pattern))
-    indexes = map_index_to_array(i,expandeds.map(&:size))
+    combinations = substitute_character_classes(parse(pattern))
+    indexes = map_index_to_array(i,combinations.map(&:size))
     result = "" 
-    expandeds.each_with_index do |e, index|
+    combinations.each_with_index do |e, index|
       result += e[indexes[index]] 
     end
     result
@@ -30,11 +30,11 @@ module Expander
   end
 
 
-  def expand_strings(pattern)
-    expand(pattern).map(&:join)
+  def substitute_and_combine_all_to_s(pattern)
+    substitute_and_combine_all(pattern).map(&:join)
   end
 
-  def expand(pattern)
+  def substitute_and_combine_all(pattern)
     combine_all(*substitute_character_classes(parse(pattern)))
   end
 
