@@ -7,15 +7,6 @@ module Expander
 
   class Index
     def map_index_to_array(i, sizes)
-      # x,y = index.divmod(sizes.last)
-      # [0,x,y]
-      # indexes = []
-      # sizes.reverse.each do
-      #   x,y = index.divmod(size)
-      # end
-        # m, z = m.divmod(2) 
-        # m, y = m.divmod(2) 
-        # m, x = m.divmod(2)
       result = []
       sizes.reverse.reduce(i) do |m,base|
         m, z = m.divmod(base) 
@@ -28,10 +19,14 @@ module Expander
 
 
 
-  def index(i)
-    x = i
-    y = i #obviously wrong
-    ['a','b'][x] + ['1','2'][y]
+  def index(i, pattern)
+    expandeds = substitute_character_classes(parse(pattern))
+    indexes = Index.new.map_index_to_array(i,expandeds.map(&:size))
+    result = "" 
+    expandeds.each_with_index do |e, index|
+      result += e[indexes[index]] 
+    end
+    result
   end
 
   def expand_strings(pattern)

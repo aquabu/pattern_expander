@@ -10,7 +10,22 @@ describe Expander::Index do
       subject.map_index_to_array(4,[2,2,2]).should == [1,0,0]
     end
 
-    it 'can handle a collection of index sizes of variable length'
+    it 'can handle a collection of index sizes of variable length' do
+      subject.map_index_to_array(8,[2,2,2,2]).should == [1,0,0,0]
+      subject.map_index_to_array(15,[2,2,2,2]).should == [1,1,1,1]
+    end
+
+    it 'can handle a collection of indexes with different sizes' do
+      subject.map_index_to_array(0,[5,3]).should == [0,0]
+      subject.map_index_to_array(2,[5,3]).should == [0,2]
+      subject.map_index_to_array(3,[5,3]).should == [1,0]
+      subject.map_index_to_array(14,[5,3]).should == [4,2]
+    end
+
+    it 'can handle many indexes of varying sizes' do
+      subject.map_index_to_array(0,[6,5,4,3,2]).should == [0,0,0,0,0]
+      subject.map_index_to_array(719,[6,5,4,3,2]).should == [5,4,3,2,1]
+    end
   end
 end
 
@@ -20,11 +35,14 @@ describe Expander do
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
   describe '.index' do
     it 'takes an integer and references the required array values' do
-      pending
-      subject.index(0).should == 'a1'
-      subject.index(1).should == 'a2'
-      subject.index(2).should == 'b1'
-      subject.index(2).should == 'b2'
+      subject.index(0,'[a|b|][1|2]').should == 'a1'
+      subject.index(1,'[a|b|][1|2]').should == 'a2'
+      subject.index(2,'[a|b|][1|2]').should == 'b1'
+      subject.index(3,'[a|b|][1|2]').should == 'b2'
+    end
+
+    it 'can reference expanded values' do
+      subject.index(11,'[\\d][\\d]').should == "11"
     end
   end
 
