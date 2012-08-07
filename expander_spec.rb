@@ -1,6 +1,11 @@
 require 'rspec'
 require 'expander'
-describe Expander::Index do
+
+describe Expander do
+  subject {Class.new {include Expander}.new }
+
+  let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
+
   describe '#map_index_to_array' do
     it 'should take an index and an array of index sizes and return an array of indexes' do
       subject.map_index_to_array(0,[2,2,2]).should == [0,0,0]
@@ -27,27 +32,39 @@ describe Expander::Index do
       subject.map_index_to_array(719,[6,5,4,3,2]).should == [5,4,3,2,1]
     end
   end
-end
 
-describe Expander do
-  subject {Class.new {include Expander}.new }
-
-  let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
-  describe '.index' do
+  describe '.get_pattern_by_index' do
     it 'takes an integer and references the required array values' do
-      subject.index(0,'[a|b|][1|2]').should == 'a1'
-      subject.index(1,'[a|b|][1|2]').should == 'a2'
-      subject.index(2,'[a|b|][1|2]').should == 'b1'
-      subject.index(3,'[a|b|][1|2]').should == 'b2'
+      subject.get_pattern_by_index('[a|b|][1|2]',0).should == 'a1'
+      subject.get_pattern_by_index('[a|b|][1|2]',1).should == 'a2'
+      subject.get_pattern_by_index('[a|b|][1|2]',2).should == 'b1'
+      subject.get_pattern_by_index('[a|b|][1|2]',3).should == 'b2'
     end
 
-    it 'can reference expanded values' do
-      subject.index(11,'[\\d][\\d]').should == "11"
+    it 'can reference character substitutions' do
+      subject.get_pattern_by_index('[\\d][\\d]',11).should == "11"
+    end
+  end
+
+  describe '.get_patterns_by_range' do
+    it 'should take a pattern and a range and return patterns for that range' do
+      subject.get_patterns_by_range('[a|b|][1|2]',0..3).should == ['a1','a2','b1','b2']
+    end
+
+    it 'should allow expanded values' do
+      subject.get_patterns_by_range('[\\d][\\d]',21..23).should == 
+        ['21','22','23']
+    end
+
+    it 'handles big patterns' do
+      subject.get_patterns_by_range('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]',
+                                    100_000..100_003).should == 
+                                    ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
     end
   end
 
   describe '.expand' do
-    it 'should create combinations of parsed strng values' do
+    it 'should create combinations of parsed string values' do
       subject.expand('[a|b|][1|2]').should == [
         ['a','1'],['a','2'],
         ['b','1'],['b','2']]

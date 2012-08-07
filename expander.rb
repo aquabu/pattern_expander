@@ -5,29 +5,30 @@ module Expander
     "\\l" => ('a'..'z').to_a 
   } 
 
-  class Index
-    def map_index_to_array(i, sizes)
-      result = []
-      sizes.reverse.reduce(i) do |m,base|
-        m, z = m.divmod(base) 
-        result << z 
-        m
-      end
-      result.reverse
-    end
+  def get_patterns_by_range(pattern, range)
+    range.collect {|i| get_pattern_by_index(pattern, i) }   
   end
 
-
-
-  def index(i, pattern)
+  def get_pattern_by_index(pattern, i)
     expandeds = substitute_character_classes(parse(pattern))
-    indexes = Index.new.map_index_to_array(i,expandeds.map(&:size))
+    indexes = map_index_to_array(i,expandeds.map(&:size))
     result = "" 
     expandeds.each_with_index do |e, index|
       result += e[indexes[index]] 
     end
     result
   end
+
+  def map_index_to_array(i, sizes)
+    result = []
+    sizes.reverse.reduce(i) do |m,base|
+      m, z = m.divmod(base) 
+      result << z 
+      m
+    end
+    result.reverse
+  end
+
 
   def expand_strings(pattern)
     expand(pattern).map(&:join)
