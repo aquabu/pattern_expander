@@ -11,7 +11,7 @@ module Combiner
 
   def get_pattern_by_index(pattern, i)
     combinations = substitute_character_classes(parse(pattern))
-    indexes = map_index_to_array(i,combinations.map(&:size))
+    indexes = index_to_array_indexes(i,combinations.map(&:size))
     result = "" 
     combinations.each_with_index do |e, index|
       result += e[indexes[index]] 
@@ -19,7 +19,7 @@ module Combiner
     result
   end
 
-  def map_index_to_array(i, sizes)
+  def index_to_array_indexes(i, sizes)
     result = []
     sizes.reverse.reduce(i) do |m,base|
       m, z = m.divmod(base) 

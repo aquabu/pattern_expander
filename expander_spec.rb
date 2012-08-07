@@ -6,30 +6,30 @@ describe Combiner do
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
 
-  describe '#map_index_to_array' do
+  describe '#index_to_array_indexes' do
     it 'should take an index and an array of index sizes and return an array of indexes' do
-      subject.map_index_to_array(0,[2,2,2]).should == [0,0,0]
-      subject.map_index_to_array(1,[2,2,2]).should == [0,0,1]
-      subject.map_index_to_array(2,[2,2,2]).should == [0,1,0]
-      subject.map_index_to_array(3,[2,2,2]).should == [0,1,1]
-      subject.map_index_to_array(4,[2,2,2]).should == [1,0,0]
+      subject.index_to_array_indexes(0,[2,2,2]).should == [0,0,0]
+      subject.index_to_array_indexes(1,[2,2,2]).should == [0,0,1]
+      subject.index_to_array_indexes(2,[2,2,2]).should == [0,1,0]
+      subject.index_to_array_indexes(3,[2,2,2]).should == [0,1,1]
+      subject.index_to_array_indexes(4,[2,2,2]).should == [1,0,0]
     end
 
     it 'can handle a collection of index sizes of variable length' do
-      subject.map_index_to_array(8,[2,2,2,2]).should == [1,0,0,0]
-      subject.map_index_to_array(15,[2,2,2,2]).should == [1,1,1,1]
+      subject.index_to_array_indexes(8,[2,2,2,2]).should == [1,0,0,0]
+      subject.index_to_array_indexes(15,[2,2,2,2]).should == [1,1,1,1]
     end
 
     it 'can handle a collection of indexes with different sizes' do
-      subject.map_index_to_array(0,[5,3]).should == [0,0]
-      subject.map_index_to_array(2,[5,3]).should == [0,2]
-      subject.map_index_to_array(3,[5,3]).should == [1,0]
-      subject.map_index_to_array(14,[5,3]).should == [4,2]
+      subject.index_to_array_indexes(0,[5,3]).should == [0,0]
+      subject.index_to_array_indexes(2,[5,3]).should == [0,2]
+      subject.index_to_array_indexes(3,[5,3]).should == [1,0]
+      subject.index_to_array_indexes(14,[5,3]).should == [4,2]
     end
 
     it 'can handle many indexes of varying sizes' do
-      subject.map_index_to_array(0,[6,5,4,3,2]).should == [0,0,0,0,0]
-      subject.map_index_to_array(719,[6,5,4,3,2]).should == [5,4,3,2,1]
+      subject.index_to_array_indexes(0,[6,5,4,3,2]).should == [0,0,0,0,0]
+      subject.index_to_array_indexes(719,[6,5,4,3,2]).should == [5,4,3,2,1]
     end
   end
 
