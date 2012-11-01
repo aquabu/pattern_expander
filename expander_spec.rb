@@ -1,10 +1,18 @@
 require 'rspec'
-require 'expander'
+require_relative 'expander'
 
 describe Combiner do
-  subject {Class.new {include Combiner}.new }
+  let(:character_classes) do
+    {
+      "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
+      "\\d" => ('0'..'9').to_a,
+      "\\l" => ('a'..'z').to_a
+    }
+  end
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
+
+  subject { Combiner.new(character_classes)}
 
   describe '#index_to_array_indexes' do
     it 'should take an index and an array of index sizes and return an array of indexes' do
@@ -52,13 +60,13 @@ describe Combiner do
     end
 
     it 'should allow combinations' do
-      subject.get_patterns_by_range('[\\d][\\d]',21..23).should == 
+      subject.get_patterns_by_range('[\\d][\\d]',21..23).should ==
         ['21','22','23']
     end
 
     it 'handles big patterns' do
       subject.get_patterns_by_range('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]',
-                                    100_000..100_003).should == 
+                                    100_000..100_003).should ==
                                     ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
     end
   end
@@ -100,18 +108,18 @@ describe Combiner do
 
   describe '.substitute_character_classes' do
     it 'substitutes a \\w  with an array of wildcard chars' do
-      subject.substitute_character_classes([['\\w']]).should == [ wildcard ] 
+      subject.substitute_character_classes([['\\w']]).should == [ wildcard ]
     end
 
     it 'substitutes a \\d with an array of numbers' do
-      subject.substitute_character_classes([['\\d']]).should == [ (0..9).map {|c| c.to_s} ] 
+      subject.substitute_character_classes([['\\d']]).should == [ (0..9).map {|c| c.to_s} ]
     end
 
     it 'substitutes \\l with an array of letters' do
-      subject.substitute_character_classes([['\\l']]).should == [ ('a'..'z').to_a ] 
+      subject.substitute_character_classes([['\\l']]).should == [ ('a'..'z').to_a ]
     end
   end
-  
+
   describe '.parse_groups' do
     it 'should handle a single group' do
       subject.parse_groups('[a]').should == ['a']
@@ -127,9 +135,9 @@ describe Combiner do
   end
 
   describe ".combine" do
-    it "combines two arrays" do 
-      subject.combine([:a,:b], [1,2,3]).should == [ 
-        [:a,1],[:a,2],[:a,3], 
+    it "combines two arrays" do
+      subject.combine([:a,:b], [1,2,3]).should == [
+        [:a,1],[:a,2],[:a,3],
         [:b,1], [:b,2], [:b,3] ]
     end
 
@@ -152,12 +160,12 @@ describe Combiner do
   context 'with longer lists' do
     let(:list) { ['a'..'c', 'A'..'C' ,1..3, 11..13] }
     it 'combines lots of arrays' do
-      expect { 
+      expect {
         subject.combine_all(*list)
       }.to_not raise_error
     end
     it 'has the expected number of permutations' do
-      expected_count = 1 
+      expected_count = 1
       list.each do |item|
         expected_count *= item.to_a.size
       end

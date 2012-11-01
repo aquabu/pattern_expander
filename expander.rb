@@ -1,20 +1,19 @@
-module Combiner
-  CHARACTER_CLASSES = {
-    "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
-    "\\d" => ('0'..'9').to_a,
-    "\\l" => ('a'..'z').to_a 
-  } 
+class Combiner
+  attr_accessor :character_classes
+  def initialize(character_classes)
+    @character_classes = character_classes
+  end
 
   def get_patterns_by_range(pattern, range)
-    range.collect {|i| get_pattern_by_index(pattern, i) }   
+    range.collect {|i| get_pattern_by_index(pattern, i) }
   end
 
   def get_pattern_by_index(pattern, i)
     combinations = substitute_character_classes(parse(pattern))
     indexes = index_to_array_indexes(i,combinations.map(&:size))
-    result = "" 
+    result = ""
     combinations.each_with_index do |e, index|
-      result += e[indexes[index]] 
+      result += e[indexes[index]]
     end
     result
   end
@@ -22,8 +21,8 @@ module Combiner
   def index_to_array_indexes(i, sizes)
     result = []
     sizes.reverse.reduce(i) do |m,base|
-      m, z = m.divmod(base) 
-      result << z 
+      m, z = m.divmod(base)
+      result << z
       m
     end
     result.reverse
@@ -51,7 +50,7 @@ module Combiner
   def substitute_character_classes(groups)
     groups.map do |group|
       group.inject([]) do |memo, item|
-        memo += CHARACTER_CLASSES[item] || [item]
+        memo += character_classes[item] || [item]
       end
     end
   end
