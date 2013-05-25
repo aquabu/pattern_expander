@@ -1,7 +1,26 @@
+# TODO: refactor to PatternParser, PatternMacro (substitute), Combiner, PatternIndex
+class PatternParser
+  def initialize(group_regex=/\[(.*?)\]/, delimiter='|')
+    @group_regex = group_regex
+    @delimiter = delimiter
+  end
+
+  def parse(string)
+    parse_groups(string).map do |group|
+      group.split(@delimiter)
+    end
+  end
+
+  def parse_groups(string)
+    string.scan(@group_regex).flatten
+  end
+end
+
 class Combiner
   attr_accessor :character_classes
-  def initialize(character_classes)
+  def initialize(character_classes, parser = PatternParser.new)
     @character_classes = character_classes
+    @parser = parser
   end
 
   def get_patterns_by_range(pattern, range)
@@ -9,7 +28,7 @@ class Combiner
   end
 
   def get_pattern_by_index(pattern, i)
-    combinations = substitute_character_classes(parse(pattern))
+    combinations = substitute_character_classes(@parser.parse(pattern))
     indexes = index_to_array_indexes(i,combinations.map(&:size))
     result = ""
     combinations.each_with_index do |e, index|
@@ -28,23 +47,12 @@ class Combiner
     result.reverse
   end
 
-
   def substitute_and_combine_all_to_s(pattern)
     substitute_and_combine_all(pattern).map(&:join)
   end
 
   def substitute_and_combine_all(pattern)
-    combine_all(*substitute_character_classes(parse(pattern)))
-  end
-
-  def parse(pattern)
-    parse_groups(pattern).map do |group|
-      group.split("|")
-    end
-  end
-
-  def parse_groups(pattern)
-    pattern.scan(/\[(.*?)\]/).flatten
+    combine_all(*substitute_character_classes(@parser.parse(pattern)))
   end
 
   def substitute_character_classes(groups)
