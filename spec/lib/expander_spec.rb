@@ -1,5 +1,4 @@
-require 'rspec'
-require_relative 'expander'
+require_relative '../spec_helper'
 
 describe PatternParser do
   describe '.parse_groups' do
