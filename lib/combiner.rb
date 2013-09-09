@@ -1,5 +1,5 @@
 class Combiner
-  attr_accessor :character_classes
+  attr_accessor :character_classes, :parser
   def initialize(character_classes, parser = PatternParser.new)
     @character_classes = character_classes
     @parser = parser
@@ -10,7 +10,7 @@ class Combiner
   end
 
   def get_pattern_by_index(pattern, i)
-    combinations = substitute_character_classes(@parser.parse(pattern))
+    combinations = substitute_character_classes(parser.parse(pattern))
     indexes = index_to_array_indexes(i,combinations.map(&:size))
     result = ""
     combinations.each_with_index do |e, index|
@@ -34,7 +34,7 @@ class Combiner
   end
 
   def substitute_and_combine_all(pattern)
-    combine_all(*substitute_character_classes(@parser.parse(pattern)))
+    combine_all(*substitute_character_classes(parser.parse(pattern)))
   end
 
   def substitute_character_classes(groups)
