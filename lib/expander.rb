@@ -1,4 +1,3 @@
-# TODO: refactor to PatternParser, PatternMacro (substitute), Combiner, PatternIndex
 class PatternParser
   attr_accessor :group_regex, :delimiter
   def initialize(group_regex=/\[(.*?)\]/, delimiter='|')

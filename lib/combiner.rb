@@ -1,7 +1,13 @@
+# TODO:
+# rename character classes to Substitutes
+# move substitution behavior there
+# may need a PatternIndex class or it may be part of PatternParser
+# pass Substitutes into PatternParser?
+
 class Combiner
-  attr_accessor :character_classes, :parser
-  def initialize(character_classes, parser = PatternParser.new)
-    @character_classes = character_classes
+  attr_accessor :substitutes, :parser
+  def initialize(substitutes, parser = PatternParser.new)
+    @substitutes = substitutes
     @parser = parser
   end
 
@@ -10,7 +16,7 @@ class Combiner
   end
 
   def get_pattern_by_index(pattern, i)
-    combinations = substitute_character_classes(parser.parse(pattern))
+    combinations = substitute(parser.parse(pattern))
     indexes = index_to_array_indexes(i,combinations.map(&:size))
     result = ""
     combinations.each_with_index do |e, index|
@@ -34,13 +40,13 @@ class Combiner
   end
 
   def substitute_and_combine_all(pattern)
-    combine_all(*substitute_character_classes(parser.parse(pattern)))
+    combine_all(*substitute(parser.parse(pattern)))
   end
 
-  def substitute_character_classes(groups)
+  def substitute(groups)
     groups.map do |group|
       group.inject([]) do |memo, item|
-        memo += character_classes[item] || [item]
+        memo += substitutes[item] || [item]
       end
     end
   end

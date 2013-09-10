@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
 
 describe Combiner do
-  let(:character_classes) do
+  let(:substitutes) do
     {
       "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
       "\\d" => ('0'..'9').to_a,
@@ -11,7 +11,7 @@ describe Combiner do
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
 
-  subject { Combiner.new(character_classes)}
+  subject { Combiner.new(substitutes)}
 
   describe '#index_to_array_indexes' do
     it 'should take an index and an array of index sizes and return an array of indexes' do
@@ -40,7 +40,7 @@ describe Combiner do
     end
   end
 
-  describe '.get_pattern_by_index' do
+  describe '#get_pattern_by_index' do
     it 'takes an integer and references the required array values' do
       subject.get_pattern_by_index('[a|b|][1|2]',0).should == 'a1'
       subject.get_pattern_by_index('[a|b|][1|2]',1).should == 'a2'
@@ -53,7 +53,7 @@ describe Combiner do
     end
   end
 
-  describe '.get_patterns_by_range' do
+  describe '#get_patterns_by_range' do
     it 'should take a pattern and a range and return patterns for that range' do
       subject.get_patterns_by_range('[a|b|][1|2]',0..3).should == ['a1','a2','b1','b2']
     end
@@ -70,14 +70,14 @@ describe Combiner do
     end
   end
 
-  describe '.substitute_and_combine_all' do
+  describe '#substitute_and_combine_all' do
     it 'should create combinations of parsed string values' do
       subject.substitute_and_combine_all('[a|b|][1|2]').should == [
         ['a','1'],['a','2'],
         ['b','1'],['b','2']]
     end
 
-    it 'should substitute_character_classes and permute character classes' do
+    it 'should substitute and permute character classes' do
       subject.substitute_and_combine_all('[a][\d]').should == [
         ['a', '0'],
         ['a', '1'],
@@ -93,24 +93,24 @@ describe Combiner do
     end
   end
 
-  describe '.substitute_and_combine_all_to_s' do
+  describe '#substitute_and_combine_all_to_s' do
     it 'returns combinations as strings' do
       subject.substitute_and_combine_all_to_s('[a|b|][1|2]').should == ['a1','a2','b1','b2']
     end
   end
 
 
-  describe '.substitute_character_classes' do
+  describe '#substitute' do
     it 'substitutes a \\w  with an array of wildcard chars' do
-      subject.substitute_character_classes([['\\w']]).should == [ wildcard ]
+      subject.substitute([['\\w']]).should == [ wildcard ]
     end
 
     it 'substitutes a \\d with an array of numbers' do
-      subject.substitute_character_classes([['\\d']]).should == [ (0..9).map {|c| c.to_s} ]
+      subject.substitute([['\\d']]).should == [ (0..9).map {|c| c.to_s} ]
     end
 
     it 'substitutes \\l with an array of letters' do
-      subject.substitute_character_classes([['\\l']]).should == [ ('a'..'z').to_a ]
+      subject.substitute([['\\l']]).should == [ ('a'..'z').to_a ]
     end
   end
 
@@ -127,7 +127,7 @@ describe Combiner do
     end
   end
 
-  it '.combine_all combines lists of arrays' do
+  it '#combine_all combines lists of arrays' do
     subject.combine_all([:a,:b],[1,2],[:c,:d]).should == [[:a, 1, :c],
       [:a, 1, :d],
       [:a, 2, :c],
