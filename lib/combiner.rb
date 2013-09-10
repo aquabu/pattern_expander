@@ -5,9 +5,8 @@
 # pass Substitutes into PatternParser?
 
 class Combiner
-  attr_accessor :substitutes, :parser
-  def initialize(substitutes, parser = PatternParser.new)
-    @substitutes = substitutes
+  attr_accessor :parser
+  def initialize(parser = PatternParser.new)
     @parser = parser
   end
 
@@ -16,7 +15,7 @@ class Combiner
   end
 
   def get_pattern_by_index(pattern, i)
-    combinations = substitute(parser.parse(pattern))
+    combinations = parser.parse(pattern)
     indexes = index_to_array_indexes(i,combinations.map(&:size))
     result = ""
     combinations.each_with_index do |e, index|
@@ -40,15 +39,7 @@ class Combiner
   end
 
   def substitute_and_combine_all(pattern)
-    combine_all(*substitute(parser.parse(pattern)))
-  end
-
-  def substitute(groups)
-    groups.map do |group|
-      group.inject([]) do |memo, item|
-        memo += substitutes[item] || [item]
-      end
-    end
+    combine_all(*parser.parse(pattern))
   end
 
   def combine_all(xs, ys, *tail)
