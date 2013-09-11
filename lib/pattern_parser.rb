@@ -9,17 +9,17 @@ class PatternParser
   end
 
   def parse(string)
-    parsed_groups = parse_groups(string).map do |group|
+    parsed_groups = _parse_groups(string).map do |group|
       group.split(delimiter)
     end
-    substitute(parsed_groups)
+    _substitute(parsed_groups)
   end
 
-  def parse_groups(string)
+  def _parse_groups(string)
     string.scan(group_regex).flatten
   end
 
-  def substitute(groups)
+  def _substitute(groups)
     groups.map do |group|
       group.inject([]) do |memo, item|
         memo += substitutes[item] || [item]
