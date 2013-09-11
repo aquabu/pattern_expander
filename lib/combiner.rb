@@ -1,11 +1,9 @@
 # TODO:
-# rename character classes to Substitutes
-# move substitution behavior there
 # may need a PatternIndex class or it may be part of PatternParser
 # pass Substitutes into PatternParser?
 
 class Combiner
-  attr_accessor :parser
+  attr_reader :parser
   def initialize(parser = PatternParser.new)
     @parser = parser
   end
@@ -15,11 +13,11 @@ class Combiner
   end
 
   def get_pattern_by_index(pattern, i)
-    combinations = parser.parse(pattern)
-    indexes = index_to_array_indexes(i,combinations.map(&:size))
+    pattern_elements = parser.parse(pattern)
+    indexes = index_to_array_indexes(i,pattern_elements.map(&:size))
     result = ""
-    combinations.each_with_index do |e, index|
-      result += e[indexes[index]]
+    pattern_elements.each_with_index do |element, index|
+      result += element[indexes[index]]
     end
     result
   end

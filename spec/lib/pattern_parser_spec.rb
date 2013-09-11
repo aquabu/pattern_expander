@@ -1,8 +1,6 @@
 require_relative '../spec_helper'
 
 describe PatternParser do
-  let(:subject) { PatternParser.new(substitutes) }
-
   let(:substitutes) do
     {
       "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
@@ -11,6 +9,7 @@ describe PatternParser do
     }
   end
 
+  let(:subject) { PatternParser.new(substitutes: substitutes) }
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
 
   describe '#parse_groups' do
