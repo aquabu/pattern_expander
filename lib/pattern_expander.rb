@@ -1,8 +1,4 @@
-# TODO:
-# may need a PatternIndex class or it may be part of PatternParser
-# pass Substitutes into PatternParser?
-
-class Combiner
+class PatternExpander
   attr_reader :parser
   def initialize(parser = PatternParser.new)
     @parser = parser

@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe Combiner do
+describe PatternExpander do
   let(:substitutes) do
     {
       "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
@@ -11,7 +11,7 @@ describe Combiner do
 
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
 
-  subject { Combiner.new(PatternParser.new(substitutes: substitutes)) }
+  subject { PatternExpander.new(PatternParser.new(substitutes: substitutes)) }
 
   describe '#index_to_array_indexes' do
     it 'should take an index and an array of index sizes and return an array of indexes' do

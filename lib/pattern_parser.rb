@@ -1,4 +1,3 @@
-# TODO: refactor to PatternParser, PatternMacro (substitute), Combiner, PatternIndex
 class PatternParser
   attr_reader :substitutes, :group_regex, :delimiter
 
