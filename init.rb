@@ -1,2 +1,1 @@
-require './lib/pattern_expander.rb'
-require './lib/pattern_parser.rb'
+Dir.glob(__dir__ + '/lib/*').each {|file| require file }

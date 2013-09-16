@@ -13,58 +13,31 @@ describe PatternExpander do
 
   subject { PatternExpander.new(PatternParser.new(substitutes: substitutes)) }
 
-  describe '#index_to_array_indexes' do
-    it 'should take an index and an array of index sizes and return an array of indexes' do
-      subject.index_to_array_indexes(0,[2,2,2]).should == [0,0,0]
-      subject.index_to_array_indexes(1,[2,2,2]).should == [0,0,1]
-      subject.index_to_array_indexes(2,[2,2,2]).should == [0,1,0]
-      subject.index_to_array_indexes(3,[2,2,2]).should == [0,1,1]
-      subject.index_to_array_indexes(4,[2,2,2]).should == [1,0,0]
-    end
-
-    it 'can handle a collection of index sizes of variable length' do
-      subject.index_to_array_indexes(8,[2,2,2,2]).should == [1,0,0,0]
-      subject.index_to_array_indexes(15,[2,2,2,2]).should == [1,1,1,1]
-    end
-
-    it 'can handle a collection of indexes with different sizes' do
-      subject.index_to_array_indexes(0,[5,3]).should == [0,0]
-      subject.index_to_array_indexes(2,[5,3]).should == [0,2]
-      subject.index_to_array_indexes(3,[5,3]).should == [1,0]
-      subject.index_to_array_indexes(14,[5,3]).should == [4,2]
-    end
-
-    it 'can handle many indexes of varying sizes' do
-      subject.index_to_array_indexes(0,[6,5,4,3,2]).should == [0,0,0,0,0]
-      subject.index_to_array_indexes(719,[6,5,4,3,2]).should == [5,4,3,2,1]
-    end
-  end
-
-  describe '#get_pattern_by_index' do
+  describe '#get_combination_by_index' do
     it 'takes an integer and references the required array values' do
-      subject.get_pattern_by_index('[a|b|][1|2]',0).should == 'a1'
-      subject.get_pattern_by_index('[a|b|][1|2]',1).should == 'a2'
-      subject.get_pattern_by_index('[a|b|][1|2]',2).should == 'b1'
-      subject.get_pattern_by_index('[a|b|][1|2]',3).should == 'b2'
+      subject.get_combination_by_index('[a|b|][1|2]',0).should == 'a1'
+      subject.get_combination_by_index('[a|b|][1|2]',1).should == 'a2'
+      subject.get_combination_by_index('[a|b|][1|2]',2).should == 'b1'
+      subject.get_combination_by_index('[a|b|][1|2]',3).should == 'b2'
     end
 
     it 'can reference character substitutions' do
-      subject.get_pattern_by_index('[\\d][\\d]',11).should == "11"
+      subject.get_combination_by_index('[\\d][\\d]',11).should == "11"
     end
   end
 
-  describe '#get_patterns_by_range' do
+  describe '#get_combinations_by_range' do
     it 'should take a pattern and a range and return patterns for that range' do
-      subject.get_patterns_by_range('[a|b|][1|2]',0..3).should == ['a1','a2','b1','b2']
+      subject.get_combinations_by_range('[a|b|][1|2]',0..3).should == ['a1','a2','b1','b2']
     end
 
     it 'should allow combinations' do
-      subject.get_patterns_by_range('[\\d][\\d]',21..23).should ==
+      subject.get_combinations_by_range('[\\d][\\d]',21..23).should ==
         ['21','22','23']
     end
 
     it 'handles big patterns' do
-      subject.get_patterns_by_range('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]',
+      subject.get_combinations_by_range('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]',
                                     100_000..100_003).should ==
                                     ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
     end
