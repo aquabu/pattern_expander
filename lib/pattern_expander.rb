@@ -1,16 +1,15 @@
 class PatternExpander
-  attr_reader :parser
+  attr_reader :combination_index
 
-  def initialize(parser = PatternParser.new)
-    @parser = parser
+  def initialize(pattern, parser = PatternParser.new)
+    @combination_index = CombinationIndex.new(parser.parse(pattern))
   end
 
-  def get_combinations_by_range(pattern, range)
-    range.collect {|i| get_combination_by_index(pattern, i) }
+  def get_combinations_by_range(range)
+    range.collect {|i| get_combination_by_index(i) }
   end
 
-  def get_combination_by_index(pattern, i)
-    combination_index = CombinationIndex.new(parser.parse(pattern))
+  def get_combination_by_index(i)
     combination_index[i]
   end
 end

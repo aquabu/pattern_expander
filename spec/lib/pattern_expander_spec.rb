@@ -9,36 +9,38 @@ describe PatternExpander do
     }
   end
 
-  let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
-
-  subject { PatternExpander.new(PatternParser.new(substitutes: substitutes)) }
 
   describe '#get_combination_by_index' do
+    let(:pattern_expander) { PatternExpander.new('[a|b|][1|2]', PatternParser.new(substitutes: substitutes)) }
     it 'takes an integer and references the required array values' do
-      subject.get_combination_by_index('[a|b|][1|2]',0).should == 'a1'
-      subject.get_combination_by_index('[a|b|][1|2]',1).should == 'a2'
-      subject.get_combination_by_index('[a|b|][1|2]',2).should == 'b1'
-      subject.get_combination_by_index('[a|b|][1|2]',3).should == 'b2'
+      pattern_expander = PatternExpander.new('[a|b|][1|2]', PatternParser.new(substitutes: substitutes))
+      pattern_expander.get_combination_by_index(0).should == 'a1'
+      pattern_expander.get_combination_by_index(1).should == 'a2'
+      pattern_expander.get_combination_by_index(2).should == 'b1'
+      pattern_expander.get_combination_by_index(3).should == 'b2'
     end
 
     it 'can reference character substitutions' do
-      subject.get_combination_by_index('[\\d][\\d]',11).should == "11"
+      pattern_expander = PatternExpander.new('[\\d][\\d]', PatternParser.new(substitutes: substitutes))
+      pattern_expander.get_combination_by_index(11).should == "11"
     end
   end
 
   describe '#get_combinations_by_range' do
     it 'should take a pattern and a range and return patterns for that range' do
-      subject.get_combinations_by_range('[a|b|][1|2]',0..3).should == ['a1','a2','b1','b2']
+      pattern_expander = PatternExpander.new('[a|b|][1|2]', PatternParser.new(substitutes: substitutes))
+      pattern_expander.get_combinations_by_range(0..3).should == ['a1','a2','b1','b2']
     end
 
     it 'should allow combinations' do
-      subject.get_combinations_by_range('[\\d][\\d]',21..23).should ==
+      pattern_expander = PatternExpander.new('[\\d][\\d]', PatternParser.new(substitutes: substitutes))
+      pattern_expander.get_combinations_by_range(21..23).should ==
         ['21','22','23']
     end
 
     it 'handles big patterns' do
-      subject.get_combinations_by_range('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]',
-                                        100_000..100_003).should ==
+      pattern_expander = PatternExpander.new('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]', PatternParser.new(substitutes: substitutes))
+      pattern_expander.get_combinations_by_range(100_000..100_003).should ==
                                         ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
     end
   end
