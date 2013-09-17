@@ -38,78 +38,8 @@ describe PatternExpander do
 
     it 'handles big patterns' do
       subject.get_combinations_by_range('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]',
-                                    100_000..100_003).should ==
-                                    ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
-    end
-  end
-
-  describe '#substitute_and_combine_all' do
-    it 'should create combinations of parsed string values' do
-      subject.substitute_and_combine_all('[a|b|][1|2]').should == [
-        ['a','1'],['a','2'],
-        ['b','1'],['b','2']]
-    end
-
-    it 'should substitute and permute character classes' do
-      subject.substitute_and_combine_all('[a][\d]').should == [
-        ['a', '0'],
-        ['a', '1'],
-        ['a', '2'],
-        ['a', '3'],
-        ['a', '4'],
-        ['a', '5'],
-        ['a', '6'],
-        ['a', '7'],
-        ['a', '8'],
-        ['a', '9']
-      ]
-    end
-  end
-
-  describe '#substitute_and_combine_all_to_s' do
-    it 'returns combinations as strings' do
-      subject.substitute_and_combine_all_to_s('[a|b|][1|2]').should == ['a1','a2','b1','b2']
-    end
-  end
-
-
-
-  describe ".combine" do
-    it "combines two arrays" do
-      subject.combine([:a,:b], [1,2,3]).should == [
-        [:a,1],[:a,2],[:a,3],
-        [:b,1], [:b,2], [:b,3] ]
-    end
-
-    it 'flattens permutations of sub arrays (needed for recursion)' do
-      subject.combine([[:a,:b],[:c]],[1]).should == [[:a,:b,1], [:c, 1]]
-    end
-  end
-
-  it '#combine_all combines lists of arrays' do
-    subject.combine_all([:a,:b],[1,2],[:c,:d]).should == [[:a, 1, :c],
-      [:a, 1, :d],
-      [:a, 2, :c],
-      [:a, 2, :d],
-      [:b, 1, :c],
-      [:b, 1, :d],
-      [:b, 2, :c],
-      [:b, 2, :d]]
-  end
-
-  context 'with longer lists' do
-    let(:list) { ['a'..'c', 'A'..'C' ,1..3, 11..13] }
-    it 'combines lots of arrays' do
-      expect {
-        subject.combine_all(*list)
-      }.to_not raise_error
-    end
-    it 'has the expected number of permutations' do
-      expected_count = 1
-      list.each do |item|
-        expected_count *= item.to_a.size
-      end
-      subject.combine_all(*list).size.should == expected_count
+                                        100_000..100_003).should ==
+                                        ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
     end
   end
 end
