@@ -6,21 +6,24 @@ class CombinationIndex
   end
 
   def [](i)
-    indexes = _index_to_array_indexes(i,element_arrays.map(&:size))
-    result = ""
+    indexes = _multi_array_indexes(i,element_arrays.map(&:size))
+    combination = ""
     element_arrays.each_with_index do |element, index|
-      result += element[indexes[index]]
+      combination += element[indexes[index]]
     end
-    result
+    combination
   end
 
-  def _index_to_array_indexes(i, sizes)
-    result = []
-    sizes.reverse.reduce(i) do |m,base|
-      m, z = m.divmod(base)
-      result << z
-      m
+  # converts a single index to several indexes
+  # ie converts from base ten (index) to a mixed base value
+  # with each place (element array) being a new base (size of the element array)
+  def _multi_array_indexes(i, sizes)
+    array_indexes = []
+    sizes.reverse.reduce(i) do |carried_index, base|
+      carried_index, remainder = carried_index.divmod(base)
+      array_indexes << remainder
+      carried_index
     end
-    result.reverse
+    array_indexes.reverse
   end
 end
