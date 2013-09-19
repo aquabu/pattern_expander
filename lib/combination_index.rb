@@ -1,15 +1,15 @@
 class CombinationIndex
-  attr_reader :element_arrays
+  attr_reader :element_lists
 
-  def initialize(element_arrays)
-    @element_arrays = element_arrays
+  def initialize(element_lists)
+    @element_lists = element_lists
   end
 
   def [](i)
-    indexes = _multi_array_indexes(i,element_arrays.map(&:size))
+    element_list_indexes = _multi_array_indexes(i,element_lists.map(&:size))
     combination = ""
-    element_arrays.each_with_index do |element, index|
-      combination += element[indexes[index]]
+    element_lists.each_with_index do |element_list, index|
+      combination += element_list[element_list_indexes[index]]
     end
     combination
   end
