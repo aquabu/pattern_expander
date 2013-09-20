@@ -8,6 +8,7 @@ class CombinationIndex
   def [](i)
     combination = ""
     element_list_indexes = _multi_array_indexes(i)
+
     element_lists.each do |element_list|
       element_list_index = element_list_indexes.shift
       combination += element_list[element_list_index]
@@ -20,15 +21,15 @@ class CombinationIndex
   # ie converts from base ten (index) to a mixed base value
   # with each place (element array) being a new base (size of the element array)
   def _multi_array_indexes(i)
+    element_list_sizes_tmp = _element_list_sizes
     array_indexes = []
 
-    _element_list_sizes.reverse.reduce(i) do |i_memo, list_size|
-      i_memo, remainder = i_memo.divmod(list_size)
-      array_indexes << remainder
-      i_memo
+    while element_list_size = element_list_sizes_tmp.pop
+      i, remainder = i.divmod(element_list_size)
+      array_indexes.unshift remainder
     end
 
-    array_indexes.reverse
+    array_indexes
   end
 
   def _element_list_sizes
