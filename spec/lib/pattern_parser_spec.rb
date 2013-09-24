@@ -3,9 +3,9 @@ require_relative '../spec_helper'
 describe PatternParser do
   let(:substitutes) do
     {
-      "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
-      "\\d" => ('0'..'9').to_a,
-      "\\l" => ('a'..'z').to_a
+      "+w" => ('a'..'z').to_a + ('0'..'9').to_a,
+      "+d" => ('0'..'9').to_a,
+      "+l" => ('a'..'z').to_a
     }
   end
 
@@ -33,16 +33,16 @@ describe PatternParser do
   end
 
   describe '#_substitute' do
-    it 'substitutes a \\w  with an array of wildcard chars' do
-      subject._substitute([['\\w']]).should == [ wildcard ]
+    it 'substitutes a +w  with an array of wildcard chars' do
+      subject._substitute([['+w']]).should == [ wildcard ]
     end
 
-    it '_substitutes a \\d with an array of numbers' do
-      subject._substitute([['\\d']]).should == [ (0..9).map {|c| c.to_s} ]
+    it '_substitutes a +d with an array of numbers' do
+      subject._substitute([['+d']]).should == [ (0..9).map {|c| c.to_s} ]
     end
 
-    it '_substitutes \\l with an array of letters' do
-      subject._substitute([['\\l']]).should == [ ('a'..'z').to_a ]
+    it '_substitutes +l with an array of letters' do
+      subject._substitute([['+l']]).should == [ ('a'..'z').to_a ]
     end
   end
 end

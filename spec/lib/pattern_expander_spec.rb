@@ -3,9 +3,8 @@ require_relative '../spec_helper'
 describe PatternExpander do
   let(:substitutes) do
     {
-      "\\w" => ('a'..'z').to_a + ('0'..'9').to_a,
-      "\\d" => ('0'..'9').to_a,
-      "\\l" => ('a'..'z').to_a
+      "+w" => ('a'..'z').to_a + ('0'..'9').to_a,
+      "+d" => ('0'..'9').to_a,
     }
   end
 
@@ -21,7 +20,7 @@ describe PatternExpander do
     end
 
     it 'can reference character substitutions' do
-      pattern_expander = PatternExpander.new('[\\d][\\d]', PatternParser.new(substitutes: substitutes))
+      pattern_expander = PatternExpander.new('[+d][+d]', PatternParser.new(substitutes: substitutes))
       pattern_expander.get_combination_by_index(11).should == "11"
     end
   end
@@ -33,13 +32,13 @@ describe PatternExpander do
     end
 
     it 'should allow combinations' do
-      pattern_expander = PatternExpander.new('[\\d][\\d]', PatternParser.new(substitutes: substitutes))
+      pattern_expander = PatternExpander.new('[+d][+d]', PatternParser.new(substitutes: substitutes))
       pattern_expander.get_combinations_by_range(21..23).should ==
         ['21','22','23']
     end
 
     it 'handles big patterns' do
-      pattern_expander = PatternExpander.new('[\\w][\\w][\\w][\\w][\\w][\\w][\\w]', PatternParser.new(substitutes: substitutes))
+      pattern_expander = PatternExpander.new('[+w][+w][+w][+w][+w][+w][+w]', PatternParser.new(substitutes: substitutes))
       pattern_expander.get_combinations_by_range(100_000..100_003).should ==
                                         ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
     end
