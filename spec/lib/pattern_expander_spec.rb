@@ -43,4 +43,9 @@ describe PatternExpander do
                                         ["aaacff2", "aaacff3", "aaacff4", "aaacff5"]
     end
   end
+
+  it 'can use single values in expansions' do
+      pattern_expander = PatternExpander.new('[foo|biz|bang|bar][_][+d]', PatternParser.new(substitutes: substitutes))
+      pattern_expander.get_combinations_by_range(9..11).should == ["foo_9", "biz_0", "biz_1"]
+  end
 end

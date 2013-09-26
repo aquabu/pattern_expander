@@ -1,10 +1,9 @@
 class PatternParser
-  attr_reader :substitutes, :group_regex, :delimiter
+  attr_reader :substitutes, :delimiter
 
-  def initialize(substitutes: {}, group_regex: /\[(.*?)\]/, delimiter: '|')
+  def initialize(substitutes: {})
     @substitutes = substitutes
-    @group_regex = group_regex
-    @delimiter = delimiter
+    @delimiter = '|'
   end
 
   def parse(string)
@@ -15,7 +14,9 @@ class PatternParser
   end
 
   def _parse_groups(string)
-    string.scan(group_regex).flatten
+    string.scan(
+     /([^\[\]]+|[\#{delimiter}]+)/
+    ).flatten
   end
 
   def _substitute(groups)

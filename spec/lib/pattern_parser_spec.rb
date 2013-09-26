@@ -24,11 +24,27 @@ describe PatternParser do
     it 'should return on array of group strings including | chars' do
       subject._parse_groups('[a|b][c|d]').should == ['a|b','c|d']
     end
+
+    it 'should return non bracket string as their own elements' do
+      subject._parse_groups('foo[a]').should == ['foo', 'a']
+    end
   end
 
   describe '#parse' do
     it 'converts patterns into arrays' do
       subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
+    end
+
+    it 'substitutes patterns in arrays' do
+      subject.parse('[+d]').should == [('0'..'9').to_a]
+    end
+
+    it 'sustitutes patterns outside of arrays' do
+      subject.parse('+d').should == [('0'..'9').to_a]
+    end
+
+    it 'leaves non substituted string as ordinary arrays' do
+      subject.parse('foo[+d]bar').should == [['foo'],('0'..'9').to_a,['bar']]
     end
   end
 
