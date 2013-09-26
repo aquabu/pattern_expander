@@ -1,7 +1,12 @@
 class PatternParser
   attr_reader :substitutes, :delimiter
 
-  def initialize(substitutes: {})
+  DEFAULT_SUBSTITUTES = {
+    "+w" => ('a'..'z').to_a + ('0'..'9').to_a,
+    "+d" => ('0'..'9').to_a,
+  }
+
+  def initialize(substitutes: DEFAULT_SUBSTITUTES)
     @substitutes = substitutes
     @delimiter = '|'
   end
@@ -15,7 +20,7 @@ class PatternParser
 
   def _parse_groups(string)
     string.scan(
-     /([^\[\]]+|[\#{delimiter}]+)/
+      /([^\[\]]+|[\#{delimiter}]+)/
     ).flatten
   end
 

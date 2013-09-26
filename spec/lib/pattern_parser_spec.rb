@@ -12,6 +12,24 @@ describe PatternParser do
   let(:subject) { PatternParser.new(substitutes: substitutes) }
   let(:wildcard) { ['a'..'z', '0'..'9'].inject([]) {|m,v| m + v.to_a} }
 
+  describe '#parse' do
+    it 'converts patterns into arrays' do
+      subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
+    end
+
+    it 'substitutes patterns in arrays' do
+      subject.parse('[+d]').should == [('0'..'9').to_a]
+    end
+
+    it 'sustitutes patterns outside of arrays' do
+      subject.parse('+d').should == [('0'..'9').to_a]
+    end
+
+    it 'leaves non substituted string as ordinary arrays' do
+      subject.parse('foo[+d]bar').should == [['foo'],('0'..'9').to_a,['bar']]
+    end
+  end
+
   describe '#_parse_groups' do
     it 'should handle a single group' do
       subject._parse_groups('[a]').should == ['a']
@@ -30,23 +48,6 @@ describe PatternParser do
     end
   end
 
-  describe '#parse' do
-    it 'converts patterns into arrays' do
-      subject.parse('[a|b|c][1|2|3]').should == [['a','b','c'], ['1','2','3']]
-    end
-
-    it 'substitutes patterns in arrays' do
-      subject.parse('[+d]').should == [('0'..'9').to_a]
-    end
-
-    it 'sustitutes patterns outside of arrays' do
-      subject.parse('+d').should == [('0'..'9').to_a]
-    end
-
-    it 'leaves non substituted string as ordinary arrays' do
-      subject.parse('foo[+d]bar').should == [['foo'],('0'..'9').to_a,['bar']]
-    end
-  end
 
   describe '#_substitute' do
     it 'substitutes a +w  with an array of wildcard chars' do
