@@ -12,4 +12,8 @@ class PatternExpander
   def get_combination_by_index(i)
     combination_index[i]
   end
+
+  def sample
+    combination_index.sample
+  end
 end

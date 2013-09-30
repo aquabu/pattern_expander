@@ -17,6 +17,14 @@ class CombinationIndex
     combination
   end
 
+  def sample
+    self[rand(size)]
+  end
+
+  def size
+    _element_list_sizes.reduce(:*)
+  end
+
   # converts a single index to several indexes
   # ie converts from base ten (index) to a mixed base value
   # with each place (element array) being a new base (size of the element array)

@@ -47,4 +47,33 @@ describe CombinationIndex do
       combination_index._multi_array_indexes(719).should == [5,4,3,2,1]
     end
   end
+
+  describe '#sample' do
+    it 'should get a random combination' do
+      letters = ('a'..'z').to_a + ('0'..'9').to_a
+      combination_elements = []
+      32.times do
+        combination_elements << letters
+      end
+
+      pattern_expander = CombinationIndex.new(combination_elements)
+
+      pattern = /^[a-z0-9]{32}$/
+
+      sample_1 = pattern_expander.sample
+      sample_1.should =~ pattern
+
+      sample_2 = pattern_expander.sample
+      sample_2.should =~ pattern
+
+      # chance of collision 1 in 36**32
+      sample_1.should_not == sample_2
+    end
+  end
+
+  it '#size should return the total number of combinations' do
+      CombinationIndex.new([[:a,:b],[0,1]]).size.should == 4
+      CombinationIndex.new([[:a,:b,:c],[0,1]]).size.should == 6
+      CombinationIndex.new([[:a,:b,:c],[0,1],[0,1]]).size.should == 12
+  end
 end

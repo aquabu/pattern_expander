@@ -36,6 +36,13 @@ describe PatternExpander do
     end
   end
 
+  describe '#sample' do
+    it 'should get a random combination' do
+      pattern_expander = PatternExpander.new('[+w][+d]')
+      pattern_expander.sample.should =~ /^\w\d$/
+    end
+  end
+
   it 'can use single values in expansions' do
       pattern_expander = PatternExpander.new('[foo|biz|bang|bar][_][+d]', PatternParser.new)
       pattern_expander.get_combinations_by_range(9..11).should == ["foo_9", "biz_0", "biz_1"]
