@@ -37,9 +37,18 @@ describe PatternExpander do
   end
 
   describe '#sample' do
+    let(:pattern_expander) do
+      PatternExpander.new('[+w][+d]')
+    end
+
     it 'should get a random combination' do
-      pattern_expander = PatternExpander.new('[+w][+d]')
       pattern_expander.sample.should =~ /^\w\d$/
+    end
+
+    it 'can get any number of random combinations' do
+      samples = pattern_expander.sample(4)
+      samples.size.should == 4
+      samples.each {|s| s.should =~ /^\w\d$/ }
     end
   end
 

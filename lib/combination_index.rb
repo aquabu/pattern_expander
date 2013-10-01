@@ -17,14 +17,20 @@ class CombinationIndex
     combination
   end
 
-  def sample
-    self[rand(size)]
+  def sample(quantity=1)
+    return _sample_one if quantity == 1
+    result = []
+    quantity.times { result << _sample_one }
+    result
   end
 
   def size
     _element_list_sizes.reduce(:*)
   end
 
+  def _sample_one
+    self[rand(size)]
+  end
   # converts a single index to several indexes
   # ie converts from base ten (index) to a mixed base value
   # with each place (element array) being a new base (size of the element array)

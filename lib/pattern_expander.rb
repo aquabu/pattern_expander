@@ -13,7 +13,7 @@ class PatternExpander
     combination_index[i]
   end
 
-  def sample
-    combination_index.sample
+  def sample(quantity=1)
+    combination_index.sample(quantity)
   end
 end

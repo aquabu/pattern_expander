@@ -56,18 +56,24 @@ describe CombinationIndex do
         combination_elements << letters
       end
 
-      pattern_expander = CombinationIndex.new(combination_elements)
+      combination_index = CombinationIndex.new(combination_elements)
 
       pattern = /^[a-z0-9]{32}$/
 
-      sample_1 = pattern_expander.sample
+      sample_1 = combination_index.sample
       sample_1.should =~ pattern
 
-      sample_2 = pattern_expander.sample
+      sample_2 = combination_index.sample
       sample_2.should =~ pattern
 
       # chance of collision 1 in 36**32
       sample_1.should_not == sample_2
+    end
+
+    it 'can return an arbitrary number of samples' do
+      combination_index.stub(:_sample_one) { 'foo' }
+      samples = combination_index.sample(3)
+      samples.should == ['foo','foo','foo']
     end
   end
 
