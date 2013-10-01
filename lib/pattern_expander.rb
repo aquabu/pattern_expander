@@ -5,12 +5,8 @@ class PatternExpander
     @combination_index = CombinationIndex.new(parser.parse(pattern))
   end
 
-  def get_combinations_by_range(range)
-    range.collect {|i| get_combination_by_index(i) }
-  end
-
-  def get_combination_by_index(i)
-    combination_index[i]
+  def [](index_or_range)
+     combination_index[index_or_range]
   end
 
   def sample(quantity=1)

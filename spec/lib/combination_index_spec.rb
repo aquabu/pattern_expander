@@ -12,6 +12,10 @@ describe CombinationIndex do
       combination_index[2].should == 'b1'
       combination_index[3].should == 'b2'
     end
+
+    it 'can take a range' do
+      combination_index[0..2].should == ['a1','a2','b1']
+    end
   end
 
   describe '#_multi_array_indexes' do

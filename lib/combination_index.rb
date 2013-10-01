@@ -5,16 +5,12 @@ class CombinationIndex
     @element_lists = element_lists
   end
 
-  def [](i)
-    combination = ""
-    element_list_indexes = _multi_array_indexes(i)
-
-    element_lists.each do |element_list|
-      element_list_index = element_list_indexes.shift
-      combination += element_list[element_list_index]
+  def [](index_or_range)
+    if index_or_range.class == Range
+      index_or_range.to_a.map { |index| _single_combination(index) }
+    else
+      _single_combination(index_or_range)
     end
-
-    combination
   end
 
   def sample(quantity=1)
@@ -48,5 +44,17 @@ class CombinationIndex
 
   def _element_list_sizes
     element_lists.map(&:size)
+  end
+
+  def _single_combination(i)
+    combination = ""
+    element_list_indexes = _multi_array_indexes(i)
+
+    element_lists.each do |element_list|
+      element_list_index = element_list_indexes.shift
+      combination += element_list[element_list_index]
+    end
+
+    combination
   end
 end
