@@ -8,7 +8,5 @@ One day I will be a real gem... (right now I am just a sketch)
 TODO
 ====
 
-* PatternExpander#[i]  && #[i..j]
-* Pass substitutes into PatternExpander
 * README instructions
 * Gemify

@@ -1,7 +1,13 @@
 class PatternExpander
   attr_reader :combination_index
 
-  def initialize(pattern, parser = PatternParser.new)
+  def initialize(pattern, substitutes: nil, parser_class: PatternParser)
+
+    unless substitutes.nil?
+      parser = parser_class.new(substitutes: substitutes)
+    else
+      parser = parser_class.new
+    end
     @combination_index = CombinationIndex.new(parser.parse(pattern))
   end
 
