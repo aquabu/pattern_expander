@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = PatternExpander::VERSION
   spec.authors       = ["Noah Thorp"]
   spec.email         = ["noah@rixiform.com"]
-  spec.description   = %q{Generate string pattern combinations}
-  spec.summary       = %q{Expands strings of patterns into indexes of combinations (kinda like a reverse regex). }
+  spec.description   = %q{Lazily generate string pattern combinations to name your [puppy|startup|band] or write bad poems or produce UUID variants. Kinda like reverse regex. Lazily loads "pages" of combinations and returns results before the heat death of the universe.}
+  spec.summary       = %q{Takes patterns and outputs their combinations - think reverse regex. }
   spec.homepage      = "http://www.github.com/aquabu/pattern_expander"
   spec.license       = "MIT"
 

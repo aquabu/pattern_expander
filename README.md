@@ -1,11 +1,30 @@
 Pattern Expander
-================
+======
 
-Takes patterns and outputs their combinations - think reverse regex. Allows access to "pages" of combinations before the heat death of the universe.
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'pattern_expander'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install pattern_expander
+
+Usage
+=====
+
+Takes patterns and outputs their combinations - think reverse regex. Lazily loads "pages" of combinations and returns results before the heat death of the universe.
 
 Pass in a string with randomly chosen values in square brackets"[]":
 
-    expander = PatternExpander.new("My [startup|band|puppy's] name is [i|e||Power |Awesome ][Ninja|Rockstar] [Ministry|Labs|Quux]")
+    expander = PatternExpander.new(
+      "My [startup|band|puppy's] name is [i|e||Power |Awesome ][Ninja|Rockstar] [Ministry|Labs|Quux]"
+    )
 
 Get random samples with #sample:
 
@@ -23,16 +42,20 @@ Get specific index values:
 By default you can use "+d" and "+w" to map to digits and alphanumeric
 characters. Here's an example of constructing a big UUID like pattern:
 
-    expander = PatternExpander.new("[+w][+w][+w][+w]-[+w][+w][+w][+w]-[+w][+w][+w][+w]-[+w][+w][+w][+w]")
+    expander = PatternExpander.new(
+      "[+w][+w][+w][+w]-[+w][+w][+w][+w]-[+w][+w][+w][+w]-[+w][+w][+w][+w]"
+    )
     expander.sample # "eo6a-68m6-coxw-14j7"
-    expander[10_000_000_000..10_000_000_002] # # ["aaaa-aaaa-aaaa-ahz2", "aaaa-aaaa-aaaa-ahz3", "aaaa-aaaa-aaaa-ahz4"]
+    expander[10_000_000_000..10_000_000_002]
+    # returns ["aaaa-aaaa-aaaa-ahz2", "aaaa-aaaa-aaaa-ahz3", "aaaa-aaaa-aaaa-ahz4"]
 
 And you can pass your own substitutes in and come up with your next
 startup elevator pitch:
 
     expander = PatternExpander.new("It's like [+company] for [+customer]",
-      substitutes: {'+company' =>  ['Chat Roulette', 'PayPall', 'Twitter', 'Kickstarter', 'Stack Overflow', 'SpaceX', 'Yelp'],
-       '+customer' => ['Texas', 'pets', 'tweens', 'coffee shops', 'salsa dancers', 'magicians', 'figure skaters']
+      substitutes: {
+       '+company' =>  ['Chat Roulette',  'Kickstarter', 'Stack Overflow', 'SpaceX'],
+       '+customer' => ['Texas', 'pets', 'tweens', 'magicians', 'figure skaters']
       }
     )
     expander.sample # It's like Chat Roulette for magicians
@@ -46,3 +69,13 @@ TODO
 * Error when max range has been exceeded for the index
 * Delegate methods from PatternExpander to CombinationIndex
 * Gemify
+
+
+Contributing
+=====
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
