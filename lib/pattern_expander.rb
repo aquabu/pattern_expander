@@ -1,3 +1,6 @@
+require_relative 'pattern_expander/combination_index'
+require_relative 'pattern_expander/pattern_parser'
+
 class PatternExpander
   attr_reader :combination_index
 

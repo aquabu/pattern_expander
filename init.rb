@@ -1,1 +1,1 @@
-Dir.glob(__dir__ + '/lib/*').each {|file| require file }
+require_relative 'lib/pattern_expander'
