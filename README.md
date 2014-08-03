@@ -68,7 +68,10 @@ TODO
 * Sample should return any value only once
 * Error when max range has been exceeded for the index
 * Delegate methods from PatternExpander to CombinationIndex
-* Gemify
+* API for adding substitutes
+* PatternExpander#all(max:n)
+* Filters (e.g. matches pattern, not in exclusion set, max length)
+* Ranges for filtered results
 
 
 Contributing
