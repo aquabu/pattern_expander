@@ -3,6 +3,7 @@ class PatternParser
 
   DEFAULT_SUBSTITUTES = {
     "+w" => ('a'..'z').to_a + ('0'..'9').to_a,
+    "+h" => ('a'..'f').to_a + ('0'..'9').to_a,
     "+d" => ('0'..'9').to_a,
   }
 
